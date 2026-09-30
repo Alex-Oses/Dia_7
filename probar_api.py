@@ -9,6 +9,7 @@ Uso:  python probar_api.py
 """
 import io
 import json
+import os
 import subprocess
 import sys
 import time
@@ -18,7 +19,11 @@ from pathlib import Path
 import httpx
 
 BASE = Path(__file__).resolve().parent
-HOST, PUERTO = "127.0.0.1", 8000
+HOST = "127.0.0.1"
+# Puerto propio de la prueba, distinto del 8000 del servicio. Asi esta prueba
+# puede ejecutarse con un servidor manual ya arrancado, en vez de fallar porque
+# el puerto esta ocupado (o, peor, medirse contra el servidor ajeno).
+PUERTO = int(os.environ.get("PUERTO_PRUEBA", 8011))
 BASE_URL = f"http://{HOST}:{PUERTO}"
 
 fallos = []
@@ -65,15 +70,16 @@ def main():
     print("Arrancando el servidor (uvicorn)...")
     log = open(BASE / "resultados" / "servidor.log", "w", encoding="utf-8")
     proceso = subprocess.Popen(
-        [sys.executable, "-m", "uvicorn", "api.main:app", "--host", HOST, "--port", str(PUERTO)],
+        [sys.executable, "-u", "-m", "uvicorn", "api.main:app", "--host", HOST, "--port", str(PUERTO)],
         cwd=str(BASE), stdout=log, stderr=subprocess.STDOUT,
+        env={**os.environ, "PYTHONUNBUFFERED": "1"},
     )
     try:
         if not esperar_servidor(proceso):
             print("El servidor no arranco. Log:")
             print((BASE / "resultados" / "servidor.log").read_text(encoding="utf-8")[-2000:])
             return 1
-        print("Servidor listo.\n")
+        print(f"Servidor listo en el puerto {PUERTO}.\n")
 
         with httpx.Client() as c:
             print("== 1. endpoints de estado ==")

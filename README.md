@@ -151,7 +151,15 @@ GET  /docs                   documentación interactiva (Swagger UI)
 `numeros=true` el modelo escribe `"aula 2"`, más legible para un humano pero no
 comparable contra una referencia literal. Explicado en la sección 5.
 
-Admitidos: `wav`, `mp3`, `ogg`, `flac`, `aac`, `m4a`. Máximo 10 MB y 5 minutos.
+Admitidos: `wav`, `mp3`, `ogg`, `flac`, `aac`, `m4a`, `aiff`, `webm`. Máximo 10 MB
+y 5 minutos.
+
+> **Sobre el WebM.** `MediaRecorder` del navegador produce `audio/webm;codecs=opus`
+> en Chrome, y la primera versión de este endpoint lo rechazaba por no estar en
+> la lista. La documentación de Gemini sí admite `audio/webm` y `audio/opus`, así
+> que la lista se amplió para cubrirlos. Aceptar menos de lo que el servicio
+> soporta no es más seguro, solo más inútil: el audio no se ejecuta ni se guarda
+> en disco en ningún caso.
 
 ### Respuesta real
 
@@ -228,7 +236,7 @@ y la métrica se están midiendo en lo mismo.
 | Clave de API | No hace falta | **Nunca llega al navegador** |
 | Coste | Sin cuota | Cuota de Gemini (15 RPM en free tier) |
 | Navegadores | Solo Chrome, Edge y Opera | Cualquiera, incluido cliente nativo |
-| Ficheros | **No**: solo micrófono en vivo | Sí: 6 formatos |
+| Ficheros | **No**: solo micrófono en vivo | Sí: 8 formatos |
 | Validación | Ninguna | Formato, tamaño, duración, MIME, firma |
 | Privacidad | El audio **sale del equipo** a servidores de Google | Pasa por vuestro servidor, que valida y registra |
 | Salida | Texto plano | JSON con idioma, duración y segmentos |
@@ -268,13 +276,19 @@ Todo el detalle en [`docs/ARQUITECTURA.md`](docs/ARQUITECTURA.md). Lo esencial:
 ## 8. Pruebas
 
 ```powershell
-python test_validacion.py    # 39 pruebas: formatos, magic bytes, WER
+python test_validacion.py    # 51 pruebas: formatos, magic bytes, WER
 python probar_api.py         # 24 pruebas: endpoint real por HTTP, con ataques
 ```
 
-`probar_api.py` arranca el servidor de verdad y comprueba que rechaza un
-ejecutable renombrado, que no sirve `../../../windows/win.ini`, que el límite de
-tasa dispara, y que la clave no se filtra.
+`probar_api.py` arranca el servidor de verdad en el puerto **8011** (no en el
+8000, para que se pueda ejecutar con un servidor manual ya levantado) y comprueba
+que rechaza un ejecutable renombrado, que no sirve `../../../windows/win.ini`, que
+el límite de tasa dispara, y que la clave no se filtra.
+
+Los errores de formato_unknown incluyen **los bytes que ha recibido** en
+hexadecimal, para poder diagnosticar sin mirar el servidor. Un audio PCM crudo
+(`audio/l16`) se rechaza a propósito: no tiene cabecera, así que cualquier
+fichero podría declararse como tal y entraría sin verificar.
 
 Durante el desarrollo las pruebas destaparon dos bugs reales: la comparación de
 extensiones contra la lista de formatos (con punto incluido, lo que rechazaba

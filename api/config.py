@@ -79,20 +79,11 @@ MAX_BYTES = int(os.getenv("MAX_AUDIO_BYTES", 10 * 1024 * 1024))
 MAX_SEGUNDOS = int(os.getenv("MAX_AUDIO_SEGUNDOS", 300))
 TIMEOUT_SEGUNDOS = float(os.getenv("GEMINI_TIMEOUT", 120))
 
-# Solo estos tipos. Una lista blanca, nunca una negra: lo que no esta prohibido
-# no se acepta, para que un formato nuevo no entre por descuido.
-TIPOS_AUDIO = {
-    "audio/wav": ".wav",
-    "audio/x-wav": ".wav",
-    "audio/wave": ".wav",
-    "audio/mpeg": ".mp3",
-    "audio/mp3": ".mp3",
-    "audio/ogg": ".ogg",
-    "audio/flac": ".flac",
-    "audio/aac": ".aac",
-    "audio/mp4": ".m4a",
-    "audio/x-m4a": ".m4a",
-}
+# Los formatos admitidos por la API de Gemini (segun su documentacion oficial)
+# y los MIME permitidos para cada uno. La lista vive en
+# api/transcripcion.py -> FORMATOS, junto con las firmas de cada formato, para
+# que la lista blanca y la deteccion por contenido no puedan separarse.
+# Se declara aqui solo para que /api/v1/salud pueda anunciarlos.
 
 # Orígenes autorizados a llamar a la API desde el navegador. Se limita a los
 # servidores locales de desarrollo: un CORS abierto con "*" permitiria que

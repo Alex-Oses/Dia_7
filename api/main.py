@@ -119,6 +119,7 @@ def limitar_por_ip(request: Request):
 @app.get("/api/v1/salud", tags=["estado"])
 async def salud():
     """Comprueba que el servicio responde y si hay credencial configurada."""
+    from .transcripcion import FORMATOS
     return {
         "estado": "ok",
         "servicio": "transcripcion-de-voz",
@@ -126,7 +127,7 @@ async def salud():
         "gemini_configurado": bool(cfg.API_KEY),
         "modelo_preferido": cfg.CADENA_MODELOS[0] if cfg.CADENA_MODELOS else None,
         "modelo_en_uso": cfg.modelo_usado(),
-        "formatos_admitidos": sorted({e.lstrip(".") for e in cfg.TIPOS_AUDIO.values()}),
+        "formatos_admitidos": sorted(FORMATOS),
         "max_bytes": cfg.MAX_BYTES,
         "max_segundos": cfg.MAX_SEGUNDOS,
     }

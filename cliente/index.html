@@ -221,12 +221,19 @@ document.getElementById("btn-grabar").onclick = async () => {
   medio.onstop = () => {
     grabandoIA = false;
     const blob = new Blob(trozos, { type: medio.mimeType || "audio/webm" });
-    const ext = (medio.mimeType || "").includes("ogg") ? "ogg" : "webm";
-    ficheroAudio = new File([blob], "grabacion." + ext, { type: blob.type });
+    // MediaRecorder en Chrome produce audio/webm;codecs=opus. Se conserva ese
+    // Content-Type (el servidor lo parte por el ';') porque el endpoint ya
+    // acepta WebM. El nombre lleva la extension que corresponde al contenedor.
+    const contenedor = (medio.mimeType || "audio/webm").split(";")[0];
+    const ext = contenedor.includes("ogg") ? "ogg"
+               : contenedor.includes("mp4") ? "m4a"
+               : contenedor.includes("wav") ? "wav" : "webm";
+    ficheroAudio = new File([blob], "grabacion." + ext, { type: contenedor });
     document.getElementById("btn-enviar").disabled = false;
     estadoA.className = "estado ok";
-    estadoA.textContent = `Audio grabado (${(blob.size / 1024).toFixed(0)} KB). Pulsa "Transcribir".`;
+    estadoA.textContent = `Audio grabado en ${contenedor.toUpperCase()} (${(blob.size / 1024).toFixed(0)} KB). Pulsa "Transcribir".`;
     document.getElementById("btn-grabar").textContent = "Grabar audio";
+    document.getElementById("btn-grabar").className = "sec";
   };
   medio.start();
   grabandoIA = true;
