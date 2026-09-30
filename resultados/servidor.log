@@ -1,0 +1,92 @@
+INFO:     Started server process [22632]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+2026-09-30 08:29:08,304 INFO    [-] 50110ce1 GET -> /api/v1/salud en 2 ms
+INFO:     127.0.0.1:52296 - "GET /api/v1/salud HTTP/1.1" 200 OK
+2026-09-30 08:29:08,318 INFO    [-] 95d1a120 GET -> /api/v1/salud en 0 ms
+INFO:     127.0.0.1:52299 - "GET /api/v1/salud HTTP/1.1" 200 OK
+2026-09-30 08:29:08,320 INFO    [-] 59d27eb4 GET -> /docs en 0 ms
+INFO:     127.0.0.1:52299 - "GET /docs HTTP/1.1" 200 OK
+2026-09-30 08:29:08,323 INFO    [-] 47716af9 GET -> /api/v1/audios en 2 ms
+INFO:     127.0.0.1:52299 - "GET /api/v1/audios HTTP/1.1" 200 OK
+2026-09-30 08:29:08,330 INFO    [-] acc2392c transcribiendo '02_horario.wav' (audio/wav)
+2026-09-30 08:29:08,735 INFO    [-] acc2392c POST -> /api/v1/transcribir en 409 ms
+INFO:     127.0.0.1:52299 - "POST /api/v1/transcribir HTTP/1.1" 200 OK
+2026-09-30 08:29:08,739 INFO    [-] 0005e6d7 transcribiendo '02_horario.wav' (audio/wav)
+2026-09-30 08:29:08,761 INFO    [-] 0005e6d7 POST -> /api/v1/transcribir en 25 ms
+INFO:     127.0.0.1:52299 - "POST /api/v1/transcribir HTTP/1.1" 200 OK
+2026-09-30 08:29:08,766 INFO    [-] 39648296 transcribiendo 'virus.wav' (audio/wav)
+2026-09-30 08:29:08,766 WARNING [-] 39648296 audio rechazado: El contenido no se reconoce como audio valido. Se esperaba un WAV, MP3, OGG, FLAC, AAC o M4A real. Si has renombrado un fichero para que pareciera un audio, esto lo detecta.
+2026-09-30 08:29:08,767 INFO    [-] 39648296 POST -> /api/v1/transcribir en 2 ms
+INFO:     127.0.0.1:52299 - "POST /api/v1/transcribir HTTP/1.1" 400 Bad Request
+2026-09-30 08:29:08,770 INFO    [-] a44d1da5 transcribiendo 'vacio.wav' (audio/wav)
+2026-09-30 08:29:08,770 WARNING [-] a44d1da5 audio rechazado: El fichero de audio esta vacio.
+2026-09-30 08:29:08,770 INFO    [-] a44d1da5 POST -> /api/v1/transcribir en 1 ms
+INFO:     127.0.0.1:52299 - "POST /api/v1/transcribir HTTP/1.1" 400 Bad Request
+2026-09-30 08:29:08,773 INFO    [-] d0fb8e6f transcribiendo 'x.exe' (audio/wav)
+2026-09-30 08:29:08,773 WARNING [-] d0fb8e6f audio rechazado: Extension '.exe' no admitida.
+2026-09-30 08:29:08,773 INFO    [-] d0fb8e6f POST -> /api/v1/transcribir en 2 ms
+INFO:     127.0.0.1:52299 - "POST /api/v1/transcribir HTTP/1.1" 400 Bad Request
+2026-09-30 08:29:08,776 INFO    [-] 64602c3a transcribiendo 'x.wav' (application/octet-stream)
+2026-09-30 08:29:08,776 WARNING [-] 64602c3a audio rechazado: Content-Type 'application/octet-stream' no es un tipo de audio admitido.
+2026-09-30 08:29:08,776 INFO    [-] 64602c3a POST -> /api/v1/transcribir en 1 ms
+INFO:     127.0.0.1:52299 - "POST /api/v1/transcribir HTTP/1.1" 400 Bad Request
+2026-09-30 08:29:08,778 INFO    [-] ebc89aa8 transcribiendo 'x.wav' (audio/mpeg)
+2026-09-30 08:29:08,778 WARNING [-] ebc89aa8 audio rechazado: Discrepancia: el fichero se declara como audio/mpeg pero su contenido real es WAV.
+2026-09-30 08:29:08,778 INFO    [-] ebc89aa8 POST -> /api/v1/transcribir en 1 ms
+INFO:     127.0.0.1:52299 - "POST /api/v1/transcribir HTTP/1.1" 400 Bad Request
+2026-09-30 08:29:08,781 INFO    [-] b1e40680 transcribiendo 'doc.wav' (audio/wav)
+2026-09-30 08:29:08,781 WARNING [-] b1e40680 audio rechazado: El contenido no se reconoce como audio valido. Se esperaba un WAV, MP3, OGG, FLAC, AAC o M4A real. Si has renombrado un fichero para que pareciera un audio, esto lo detecta.
+2026-09-30 08:29:08,781 INFO    [-] b1e40680 POST -> /api/v1/transcribir en 1 ms
+INFO:     127.0.0.1:52299 - "POST /api/v1/transcribir HTTP/1.1" 400 Bad Request
+2026-09-30 08:29:08,783 INFO    [-] b573c4ac GET -> /windows/win.ini en 0 ms
+INFO:     127.0.0.1:52299 - "GET /windows/win.ini HTTP/1.1" 404 Not Found
+2026-09-30 08:29:08,784 INFO    [-] fb0489ed GET -> /api/v1/audio/../../.env en 0 ms
+INFO:     127.0.0.1:52299 - "GET /api/v1/audio/../../.env HTTP/1.1" 404 Not Found
+2026-09-30 08:29:08,786 INFO    [-] e2958d18 GET -> /api/v1/audio/....//....//.env en 0 ms
+INFO:     127.0.0.1:52299 - "GET /api/v1/audio/....//....//.env HTTP/1.1" 404 Not Found
+2026-09-30 08:29:08,793 INFO    [-] c3d7322d GET -> /api/v1/audio/01_presentacion.wav en 6 ms
+INFO:     127.0.0.1:52299 - "GET /api/v1/audio/01_presentacion.wav HTTP/1.1" 200 OK
+2026-09-30 08:29:08,798 INFO    [-] f6110332 transcribiendo 'corto.wav' (audio/wav)
+2026-09-30 08:29:08,822 INFO    [-] f6110332 POST -> /api/v1/transcribir en 24 ms
+INFO:     127.0.0.1:52299 - "POST /api/v1/transcribir HTTP/1.1" 200 OK
+2026-09-30 08:29:08,825 INFO    [-] d8adaa87 transcribiendo 'corto.wav' (audio/wav)
+2026-09-30 08:29:08,845 INFO    [-] d8adaa87 POST -> /api/v1/transcribir en 21 ms
+INFO:     127.0.0.1:52299 - "POST /api/v1/transcribir HTTP/1.1" 200 OK
+2026-09-30 08:29:08,847 WARNING [-] rate limit: 127.0.0.1 supero 10 peticiones
+2026-09-30 08:29:08,848 INFO    [-] af391cd9 POST -> /api/v1/transcribir en 1 ms
+INFO:     127.0.0.1:52299 - "POST /api/v1/transcribir HTTP/1.1" 429 Too Many Requests
+2026-09-30 08:29:08,850 WARNING [-] rate limit: 127.0.0.1 supero 10 peticiones
+2026-09-30 08:29:08,850 INFO    [-] 98969716 POST -> /api/v1/transcribir en 1 ms
+INFO:     127.0.0.1:52299 - "POST /api/v1/transcribir HTTP/1.1" 429 Too Many Requests
+2026-09-30 08:29:08,852 WARNING [-] rate limit: 127.0.0.1 supero 10 peticiones
+2026-09-30 08:29:08,853 INFO    [-] c03c76dc POST -> /api/v1/transcribir en 1 ms
+INFO:     127.0.0.1:52299 - "POST /api/v1/transcribir HTTP/1.1" 429 Too Many Requests
+2026-09-30 08:29:08,855 WARNING [-] rate limit: 127.0.0.1 supero 10 peticiones
+2026-09-30 08:29:08,855 INFO    [-] 2c14b9c3 POST -> /api/v1/transcribir en 1 ms
+INFO:     127.0.0.1:52299 - "POST /api/v1/transcribir HTTP/1.1" 429 Too Many Requests
+2026-09-30 08:29:08,857 WARNING [-] rate limit: 127.0.0.1 supero 10 peticiones
+2026-09-30 08:29:08,858 INFO    [-] 7fa0e310 POST -> /api/v1/transcribir en 1 ms
+INFO:     127.0.0.1:52299 - "POST /api/v1/transcribir HTTP/1.1" 429 Too Many Requests
+2026-09-30 08:29:08,861 WARNING [-] rate limit: 127.0.0.1 supero 10 peticiones
+2026-09-30 08:29:08,861 INFO    [-] 3dd0e6d4 POST -> /api/v1/transcribir en 2 ms
+INFO:     127.0.0.1:52299 - "POST /api/v1/transcribir HTTP/1.1" 429 Too Many Requests
+2026-09-30 08:29:08,864 WARNING [-] rate limit: 127.0.0.1 supero 10 peticiones
+2026-09-30 08:29:08,864 INFO    [-] 99ee555b POST -> /api/v1/transcribir en 1 ms
+INFO:     127.0.0.1:52299 - "POST /api/v1/transcribir HTTP/1.1" 429 Too Many Requests
+2026-09-30 08:29:08,866 WARNING [-] rate limit: 127.0.0.1 supero 10 peticiones
+2026-09-30 08:29:08,867 INFO    [-] 9770449d POST -> /api/v1/transcribir en 1 ms
+INFO:     127.0.0.1:52299 - "POST /api/v1/transcribir HTTP/1.1" 429 Too Many Requests
+2026-09-30 08:29:08,869 WARNING [-] rate limit: 127.0.0.1 supero 10 peticiones
+2026-09-30 08:29:08,870 INFO    [-] fc73d78b POST -> /api/v1/transcribir en 1 ms
+INFO:     127.0.0.1:52299 - "POST /api/v1/transcribir HTTP/1.1" 429 Too Many Requests
+2026-09-30 08:29:08,873 WARNING [-] rate limit: 127.0.0.1 supero 10 peticiones
+2026-09-30 08:29:08,873 INFO    [-] de01c95a POST -> /api/v1/transcribir en 2 ms
+INFO:     127.0.0.1:52299 - "POST /api/v1/transcribir HTTP/1.1" 429 Too Many Requests
+2026-09-30 08:29:08,880 WARNING [-] rate limit: 127.0.0.1 supero 10 peticiones
+2026-09-30 08:29:08,881 INFO    [-] fbffdd87 POST -> /api/v1/transcribir en 6 ms
+INFO:     127.0.0.1:52299 - "POST /api/v1/transcribir HTTP/1.1" 429 Too Many Requests
+2026-09-30 08:29:08,883 WARNING [-] rate limit: 127.0.0.1 supero 10 peticiones
+2026-09-30 08:29:08,884 INFO    [-] 3583ea2c POST -> /api/v1/transcribir en 2 ms
+INFO:     127.0.0.1:52299 - "POST /api/v1/transcribir HTTP/1.1" 429 Too Many Requests

@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dia 7 - Transcripcion de voz</title>
+<style>
+  :root {
+    --bg: #0f1216; --panel: #171c23; --borde: #2a323d;
+    --txt: #e6ebf2; --txt-dim: #93a1b3; --acento: #4f8cff; --ok: #3fb950;
+    --mal: #f85149; --aviso: #d29922;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 2rem 1rem; background: var(--bg); color: var(--txt);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; line-height: 1.5;
+  }
+  .cont { max-width: 1000px; margin: 0 auto; }
+  h1 { font-size: 1.5rem; margin: 0 0 .25rem; }
+  h2 { font-size: 1.05rem; margin: 2rem 0 .75rem; }
+  .sub { color: var(--txt-dim); font-size: .9rem; margin: 0 0 1.5rem; }
+  .panel { background: var(--panel); border: 1px solid var(--borde); border-radius: 10px; padding: 1.1rem; margin-bottom: 1rem; }
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  @media (max-width: 800px) { .cols { grid-template-columns: 1fr; } }
+  button {
+    background: var(--acento); color: #fff; border: 0; border-radius: 7px;
+    padding: .6rem 1.1rem; font-size: .95rem; font-weight: 600; cursor: pointer;
+  }
+  button:hover:not(:disabled) { filter: brightness(1.12); }
+  button:disabled { opacity: .45; cursor: not-allowed; }
+  button.parar { background: var(--mal); }
+  button.sec { background: #303a47; }
+  textarea {
+    width: 100%; min-height: 110px; background: #0b0e12; color: var(--txt);
+    border: 1px solid var(--borde); border-radius: 7px; padding: .7rem;
+    font-family: ui-monospace, Consolas, monospace; font-size: .88rem; resize: vertical;
+  }
+  .etiqueta { font-size: .8rem; color: var(--txt-dim); text-transform: uppercase; letter-spacing: .04em; margin-bottom: .4rem; }
+  .estado { font-size: .85rem; color: var(--txt-dim); margin-top: .6rem; min-height: 1.2em; }
+  .estado.escuchando { color: var(--mal); }
+  .estado.error { color: var(--mal); }
+  .estado.ok { color: var(--ok); }
+  .estado.aviso { color: var(--aviso); }
+  table { width: 100%; border-collapse: collapse; font-size: .88rem; }
+  th, td { text-align: left; padding: .5rem .6rem; border-bottom: 1px solid var(--borde); }
+  th { color: var(--txt-dim); font-weight: 600; font-size: .78rem; text-transform: uppercase; }
+  .valor { font-weight: 700; }
+  .nota { font-size: .82rem; color: var(--txt-dim); margin-top: .8rem; }
+  code { background: #0b0e12; padding: .1rem .35rem; border-radius: 4px; font-size: .85em; }
+  .fila-btn { display: flex; gap: .6rem; flex-wrap: wrap; align-items: center; }
+  input[type=file] { font-size: .85rem; color: var(--txt-dim); }
+  .verde { color: var(--ok); } .rojo { color: var(--mal); }
+</style>
+</head>
+<body>
+<div class="cont">
+
+  <h1>Dia 7 (ASIX) &mdash; Transcripcion de voz</h1>
+  <p class="sub">
+    Dos caminos para convertir voz en texto, lado a lado. El primero va dentro del
+    navegador con la Web Speech API. El segundo es nuestro endpoint ASIX, que
+    reenvia el audio a Gemini desde el servidor.
+  </p>
+
+  <div class="panel">
+    <div class="etiqueta">Estado del endpoint</div>
+    <div class="estado" id="estado-api">Comprobando...</div>
+  </div>
+
+  <div class="cols">
+
+    <div class="panel">
+      <div class="etiqueta">1. Web Speech API (navegador, en tiempo real)</div>
+      <div class="fila-btn">
+        <button id="btn-empezar">Empezar a hablar</button>
+        <button id="btn-parar" class="parar" disabled>Parar</button>
+      </div>
+      <textarea id="salida-webspeech" placeholder="El texto aparecera aqui mientras hablas..."></textarea>
+      <div class="estado" id="estado-webspeech"></div>
+      <p class="nota">
+        <strong>Limitaciones reales:</strong> solo funciona en Chrome, Edge y Opera
+        (Firefox y Safari no la implementan). Pide permiso de microfono. Y aunque
+        la interfaz es local, Chrome envia el audio a los servidores de Google
+        para reconocerlo: <em>no es un reconocimiento offline</em>. Solo admite
+        audio en vivo del microfono, no ficheros.
+      </p>
+    </div>
+
+    <div class="panel">
+      <div class="etiqueta">2. Endpoint ASIX &rarr; Gemini (por lotes)</div>
+      <div class="fila-btn">
+        <button id="btn-grabar" class="sec">Grabar audio</button>
+        <button id="btn-enviar" disabled>Transcribir</button>
+        <label class="fila-btn">
+          <input type="file" id="fichero" accept="audio/*">
+        </label>
+      </div>
+      <textarea id="salida-asix" placeholder="Se necesita un audio: graba con el boton o elige un fichero..."></textarea>
+      <div class="estado" id="estado-asix"></div>
+      <p class="nota">
+        Acepta ficheros <code>.wav .mp3 .ogg .flac .aac .m4a</code> de hasta 10 MB
+        y 5 minutos. Funciona con cualquier navegador moderno, y el audio no sale
+        del servidor de la API: la clave de Gemini nunca llega al navegador.
+      </p>
+    </div>
+
+  </div>
+
+  <div class="panel">
+    <div class="etiqueta">Comparativa de los tres audios de prueba</div>
+    <div class="estado" id="estado-tabla">Cargando audios...</div>
+    <table id="tabla-audios">
+      <thead>
+        <tr><th>Audio</th><th>Transcripcion del endpoint</th><th>Palabras</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <p class="nota">
+      Pide la transcripcion a nuestro endpoint. El texto de referencia (la frase
+      exacta que se sintetizo) y el WER calculado estan en
+      <code>resultados/informe_precision.md</code>.
+    </p>
+  </div>
+
+</div>
+
+<script>
+const API = "http://127.0.0.1:8000";
+
+// ---------------------------------------------------------------- estado API
+async function comprobarApi() {
+  const el = document.getElementById("estado-api");
+  try {
+    const r = await fetch(API + "/api/v1/salud");
+    if (!r.ok) throw new Error("HTTP " + r.status);
+    const s = await r.json();
+    el.className = s.gemini_configurado ? "estado ok" : "estado aviso";
+    el.textContent = s.gemini_configurado
+      ? `Endpoint operativo. Modelo preferido: ${s.modelo_preferido} | formatos: ${s.formatos_admitidos.join(", ")}`
+      : "El servidor responde pero NO tiene GEMINI_API_KEY en el .env. Transcripcion no disponible.";
+  } catch (e) {
+    el.className = "estado error";
+    el.textContent = "No se puede contactar con " + API +
+      ". Arranca el servidor en otra terminal:  uvicorn api.main:app --port 8000";
+  }
+}
+
+// ------------------------------------------------------- Web Speech API
+const recon = window.SpeechRecognition || window.webkitSpeechRecognition;
+const salidaWS = document.getElementById("salida-webspeech");
+const estadoWS = document.getElementById("estado-webspeech");
+let reconocimiento = null, grabando = false;
+
+if (!recon) {
+  document.getElementById("btn-empezar").disabled = true;
+  estadoWS.className = "estado error";
+  estadoWS.textContent = "Este navegador no soporta la Web Speech API. Usa Chrome, Edge u Opera.";
+} else {
+  reconocimiento = new recon();
+  reconocimiento.lang = "es-ES";
+  reconocimiento.continuous = true;
+  reconocimiento.interimResults = true;
+
+  reconocimiento.onresult = (ev) => {
+    let final = "", provisional = "";
+    for (let i = ev.resultIndex; i < ev.results.length; i++) {
+      const t = ev.results[i][0].transcript;
+      if (ev.results[i].isFinal) final += t + " ";
+      else provisional += t;
+    }
+    if (final) salidaWS.value += final;
+    salidaWS.dataset.provisional = provisional;
+  };
+  reconocimiento.onerror = (ev) => {
+    estadoWS.className = "estado error";
+    estadoWS.textContent = "Error de reconocimiento: " + ev.error +
+      (ev.error === "not-allowed" ? " (has denegado el microfono)" : "");
+    pararWS();
+  };
+  reconocimiento.onend = () => { if (grabando) try { reconocimiento.start(); } catch (e) {} };
+
+  document.getElementById("btn-empezar").onclick = () => {
+    grabando = true;
+    document.getElementById("btn-empezar").disabled = true;
+    document.getElementById("btn-parar").disabled = false;
+    estadoWS.className = "estado escuchando";
+    estadoWS.textContent = "Escuchando... habla en espanol.";
+    try { reconocimiento.start(); } catch (e) {}
+  };
+}
+
+function pararWS() {
+  grabando = false;
+  if (reconocimiento) { try { reconocimiento.stop(); } catch (e) {} }
+  document.getElementById("btn-empezar").disabled = false;
+  document.getElementById("btn-parar").disabled = true;
+  estadoWS.className = "estado";
+  estadoWS.textContent = "Grabacion detenida.";
+}
+document.getElementById("btn-parar").onclick = pararWS;
+
+// ------------------------------------------- endpoint ASIX (grabar + enviar)
+let medio = null, trozos = [], grabandoIA = false;
+const salidaA = document.getElementById("salida-asix");
+const estadoA = document.getElementById("estado-asix");
+
+document.getElementById("btn-grabar").onclick = async () => {
+  if (grabandoIA) {
+    medio.stop();
+    return;
+  }
+  try {
+    medio = new MediaRecorder(await navigator.mediaDevices.getUserMedia({ audio: true }));
+  } catch (e) {
+    estadoA.className = "estado error";
+    estadoA.textContent = "No se pudo acceder al microfono: " + e.message;
+    return;
+  }
+  trozos = [];
+  medio.ondataavailable = (e) => trozos.push(e.data);
+  medio.onstop = () => {
+    grabandoIA = false;
+    const blob = new Blob(trozos, { type: medio.mimeType || "audio/webm" });
+    const ext = (medio.mimeType || "").includes("ogg") ? "ogg" : "webm";
+    ficheroAudio = new File([blob], "grabacion." + ext, { type: blob.type });
+    document.getElementById("btn-enviar").disabled = false;
+    estadoA.className = "estado ok";
+    estadoA.textContent = `Audio grabado (${(blob.size / 1024).toFixed(0)} KB). Pulsa "Transcribir".`;
+    document.getElementById("btn-grabar").textContent = "Grabar audio";
+  };
+  medio.start();
+  grabandoIA = true;
+  document.getElementById("btn-grabar").textContent = "Detener";
+  document.getElementById("btn-grabar").className = "parar";
+  estadoA.className = "estado escuchando";
+  estadoA.textContent = "Grabando con el microfono...";
+};
+
+let ficheroAudio = null;
+document.getElementById("fichero").onchange = (e) => {
+  ficheroAudio = e.target.files[0] || null;
+  document.getElementById("btn-enviar").disabled = !ficheroAudio;
+  if (ficheroAudio) estadoA.textContent = `Fichero elegido: ${ficheroAudio.name}`;
+};
+
+document.getElementById("btn-enviar").onclick = async () => {
+  if (!ficheroAudio) return;
+  const btn = document.getElementById("btn-enviar");
+  btn.disabled = true;
+  estadoA.className = "estado";
+  estadoA.textContent = "Transcribiendo en el servidor...";
+  const fd = new FormData();
+  fd.append("audio", ficheroAudio, ficheroAudio.name);
+  try {
+    const r = await fetch(API + "/api/v1/transcribir", { method: "POST", body: fd });
+    const j = await r.json();
+    if (!r.ok) {
+      estadoA.className = "estado error";
+      estadoA.textContent = `Error ${r.status}: ${j.detail || "sin detalle"}`;
+      salidaA.value = "";
+      return;
+    }
+    salidaA.value = j.transcripcion || "";
+    estadoA.className = "estado ok";
+    estadoA.textContent =
+      `Listo. Modelo: ${j.modelo} | idioma: ${j.idioma_detectado} | ` +
+      `formato detectado: ${j.formato_detectado} | ` +
+      (j.served_from_cache ? "servido desde cache" : "procesado ahora") +
+      ` | peticion ${j.request_id}`;
+  } catch (e) {
+    estadoA.className = "estado error";
+    estadoA.textContent = "Fallo de red: " + e.message;
+  } finally {
+    btn.disabled = false;
+  }
+};
+
+// ------------------------------------------------------ tabla de ejemplos
+async function cargarAudios() {
+  const cuerpo = document.querySelector("#tabla-audios tbody");
+  const estado = document.getElementById("estado-tabla");
+  try {
+    const r = await fetch(API + "/api/v1/audios");
+    const j = await r.json();
+    if (!j.audios || !j.audios.length) { estado.textContent = "Sin audios de ejemplo."; return; }
+    estado.className = "estado ok";
+    estado.textContent = `${j.audios.length} audios. Pulsa en "Transcribir" de cada fila.`;
+    for (const a of j.audios) {
+      const tr = document.createElement("tr");
+      tr.innerHTML =
+        `<td>${a.archivo}<br><span class="nota">${a.duracion_s}s</span><br>
+           <button class="sec" style="margin-top:.4rem">Transcribir</button></td>
+         <td class="transcripcion">-</td>
+         <td class="palabras">-</td>`;
+      tr.querySelector("button").onclick = async (ev) => {
+        const b = ev.target;
+        b.disabled = true;
+        b.textContent = "...";
+        try {
+          const resp = await fetch(API + a.url);
+          const blob = await resp.blob();
+          const fd = new FormData();
+          fd.append("audio", blob, a.archivo);
+          const rr = await fetch(API + "/api/v1/transcribir", { method: "POST", body: fd });
+          const jj = await rr.json();
+          if (!rr.ok) throw new Error(jj.detail || rr.status);
+          tr.querySelector(".transcripcion").textContent = jj.transcripcion;
+          const ref = a.transcripcion_real.split(/\s+/).length;
+          const hip = (jj.transcripcion || "").split(/\s+/).filter(Boolean).length;
+          tr.querySelector(".palabras").innerHTML =
+            `<span class="valor">${hip}</span> <span class="nota">(ref: ${ref})</span>`;
+        } catch (e) {
+          tr.querySelector(".transcripcion").innerHTML = `<span class="rojo">${e.message}</span>`;
+        } finally {
+          b.disabled = false;
+          b.textContent = "Transcribir";
+        }
+      };
+      cuerpo.appendChild(tr);
+    }
+  } catch (e) {
+    estado.className = "estado error";
+    estado.textContent = "No se pudo cargar la lista de audios: " + e.message;
+  }
+}
+
+comprobarApi();
+cargarAudios();
+</script>
+</body>
+</html>

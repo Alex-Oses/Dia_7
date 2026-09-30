@@ -1,0 +1,36 @@
+{
+  "version": "1.0",
+  "generado": "2026-09-30T08:10:41.110715",
+  "metodo": "Sintesis de voz de Windows (System.Speech), voz 'Microsoft Helena Desktop Female' (es-ES). Sin red y sin API key.",
+  "formato": "WAV mono 16 kHz 16 bits PCM (el que espera la API de audio de Gemini)",
+  "nota": "La frase exacta de cada audio figura en 'transcripcion_real'. Es la verdad terreno contra la que se mide el WER de la transcripcion, de modo que la precision es medible y no una estimacion. La voz es sintetica, no humana: las cifras con voz humana suelen ser MEJORES que estas, asi que el WER medido aqui es una cota pesimista.",
+  "audios": [
+    {
+      "id": "01_presentacion",
+      "archivo": "01_presentacion.wav",
+      "duracion_s": 7.79,
+      "bytes": 249218,
+      "transcripcion_real": "Buenos dias, me llamo Alex y hoy presento la practica de servicios de voz para el grupo de sistemas.",
+      "velocidad_tts": -2,
+      "nota": "Presentacion personal. Frase larga con nombre propio y pausa natural."
+    },
+    {
+      "id": "02_horario",
+      "archivo": "02_horario.wav",
+      "duracion_s": 5.71,
+      "bytes": 182684,
+      "transcripcion_real": "La reunion empieza a las nueve y media, en el aula dos, con el profesor de redes.",
+      "velocidad_tts": 0,
+      "nota": "Cita con hora y lugar. Comprueba que los numeros se transcriben bien."
+    },
+    {
+      "id": "03_incidencia",
+      "archivo": "03_incidencia.wav",
+      "duracion_s": 5.44,
+      "bytes": 174144,
+      "transcripcion_real": "El servidor del aula no funciona, hemos perdido la conexion a internet desde las nueve de la mañana.",
+      "velocidad_tts": 1,
+      "nota": "Parte de incidencia. Frase realista del ambito ASIX, con varios terminos tecnicos."
+    }
+  ]
+}

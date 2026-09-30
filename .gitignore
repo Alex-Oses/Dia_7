@@ -1,0 +1,7 @@
+venv/
+.env
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+# resultados/.cache/ NO se ignora: guarda las respuestas ya pagadas de Gemini y
+# permite repetir el informe sin volver a gastar cuota.

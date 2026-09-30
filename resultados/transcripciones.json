@@ -1,0 +1,110 @@
+{
+  "resumen": {
+    "generado": "2026-09-30T08:22:52.209409",
+    "modelos": [
+      "gemini-3.7-flash"
+    ],
+    "n_audios": 3,
+    "wer_medio": 0.0908,
+    "wer_medio_sin_acentos": 0.0,
+    "recall_medio": 1.0,
+    "precision_medio": 1.0
+  },
+  "audios": [
+    {
+      "id": "01_presentacion",
+      "archivo": "01_presentacion.wav",
+      "duracion_s": 7.79,
+      "nota": "Presentacion personal. Frase larga con nombre propio y pausa natural.",
+      "transcripcion_real": "Buenos dias, me llamo Alex y hoy presento la practica de servicios de voz para el grupo de sistemas.",
+      "transcripcion_obtenida": "Buenos días, me llamo Álex y hoy presento la práctica de servicios de voz para el grupo de sistemas.",
+      "idioma_detectado": "es",
+      "modelo": "gemini-3.7-flash",
+      "n_segmentos": 1,
+      "segmentos": [
+        {
+          "inicio": 0.0,
+          "fin": 7.65,
+          "texto": "Buenos días, me llamo Álex y hoy presento la práctica de servicios de voz para el grupo de sistemas."
+        }
+      ],
+      "wer": 0.1579,
+      "wer_sin_acentos": 0.0,
+      "errores": {
+        "S": 3,
+        "I": 0,
+        "D": 0
+      },
+      "recall_palabras": 0.8421,
+      "precision_palabras": 0.8421,
+      "recall_sin_acentos": 1.0,
+      "precision_sin_acentos": 1.0,
+      "n_palabras_referencia": 19
+    },
+    {
+      "id": "02_horario",
+      "archivo": "02_horario.wav",
+      "duracion_s": 5.71,
+      "nota": "Cita con hora y lugar. Comprueba que los numeros se transcriben bien.",
+      "transcripcion_real": "La reunion empieza a las nueve y media, en el aula dos, con el profesor de redes.",
+      "transcripcion_obtenida": "La reunión empieza a las nueve y media, en el aula dos, con el profesor de redes.",
+      "idioma_detectado": "es",
+      "modelo": "gemini-3.7-flash",
+      "n_segmentos": 1,
+      "segmentos": [
+        {
+          "inicio": 0.0,
+          "fin": 5.38,
+          "texto": "La reunión empieza a las nueve y media, en el aula dos, con el profesor de redes."
+        }
+      ],
+      "wer": 0.0588,
+      "wer_sin_acentos": 0.0,
+      "errores": {
+        "S": 1,
+        "I": 0,
+        "D": 0
+      },
+      "recall_palabras": 0.9412,
+      "precision_palabras": 0.9412,
+      "recall_sin_acentos": 1.0,
+      "precision_sin_acentos": 1.0,
+      "n_palabras_referencia": 17
+    },
+    {
+      "id": "03_incidencia",
+      "archivo": "03_incidencia.wav",
+      "duracion_s": 5.44,
+      "nota": "Parte de incidencia. Frase realista del ambito ASIX, con varios terminos tecnicos.",
+      "transcripcion_real": "El servidor del aula no funciona, hemos perdido la conexion a internet desde las nueve de la mañana.",
+      "transcripcion_obtenida": "El servidor del aula no funciona, hemos perdido la conexión a internet desde las nueve de la mañana.",
+      "idioma_detectado": "es",
+      "modelo": "gemini-3.7-flash",
+      "n_segmentos": 2,
+      "segmentos": [
+        {
+          "inicio": 0.0,
+          "fin": 2.0,
+          "texto": "El servidor del aula no funciona,"
+        },
+        {
+          "inicio": 2.0,
+          "fin": 5.4,
+          "texto": "hemos perdido la conexión a internet desde las nueve de la mañana."
+        }
+      ],
+      "wer": 0.0556,
+      "wer_sin_acentos": 0.0,
+      "errores": {
+        "S": 1,
+        "I": 0,
+        "D": 0
+      },
+      "recall_palabras": 0.9444,
+      "precision_palabras": 0.9444,
+      "recall_sin_acentos": 1.0,
+      "precision_sin_acentos": 1.0,
+      "n_palabras_referencia": 18
+    }
+  ]
+}
